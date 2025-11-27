@@ -25,7 +25,7 @@ turbo/
 # Örnek env dosyasını takipte tutmak istersen:
 #!.env.example
 
-# --- Prisma / veritabanı ---
+# --- Prisma / veritabanı --- test
 prisma/dev.db
 prisma/dev.db-journal
 prisma/*.sqlite
