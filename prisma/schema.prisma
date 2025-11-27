@@ -1,0 +1,127 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String        @id @default(cuid())
+  walletAddress String        @unique
+  createdAt     DateTime      @default(now())
+
+  balance       UserBalance?
+  purchases     GemPurchase[]
+  nftListings   NftListing[]
+  channel       Channel?
+}
+
+model UserBalance {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id])
+
+  gems   Int    @default(0)
+}
+
+model GemPurchase {
+  id          String             @id @default(cuid())
+  user        User               @relation(fields: [userId], references: [id])
+  userId      String
+  txHash      String             @unique
+  packId      Int
+  usdcAmount  String             // BigInt string saklıyoruz
+  gems        Int
+  status      GemPurchaseStatus  @default(PENDING)
+  createdAt   DateTime           @default(now())
+}
+
+enum GemPurchaseStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+model NftAsset {
+  id              String      @id @default(cuid())
+  chain           String      // "base"
+  contractAddress String
+  tokenId         String      // uint256 ama string
+  metadataUri     String?
+
+  listings        NftListing[]
+}
+
+model NftListing {
+  id          String         @id @default(cuid())
+  nft         NftAsset       @relation(fields: [nftId], references: [id])
+  nftId       String
+
+  seller      User           @relation(fields: [sellerId], references: [id])
+  sellerId    String
+
+  currency    ListingCurrency
+  priceGems   Int?
+  priceToken  String?        // Season 1 coini için
+
+  status      ListingStatus  @default(ACTIVE)
+  createdAt   DateTime       @default(now())
+  closedAt    DateTime?
+}
+
+enum ListingCurrency {
+  GEMS
+  TOKEN
+}
+
+enum ListingStatus {
+  ACTIVE
+  SOLD
+  CANCELLED
+}
+
+enum ContentType {
+  JUST_CHATTING
+  COMPETITIVE
+  VARIETY
+  IRL
+  TALK_SHOW
+}
+
+model Channel {
+  id          String           @id @default(cuid())
+  userId      String           @unique
+  user        User             @relation(fields: [userId], references: [id])
+
+  name        String
+  followers   Int              @default(0)
+  avgViewers  Int              @default(0)
+  hype        Int              @default(0)
+  setupLevel  Int              @default(1)
+  reputation  Int              @default(0)
+
+  createdAt   DateTime         @default(now())
+
+  sessions    StreamSession[]
+}
+
+model StreamSession {
+  id                String       @id @default(cuid())
+  channelId         String
+  channel           Channel      @relation(fields: [channelId], references: [id])
+
+  contentType       ContentType
+  title             String
+  durationMinutes   Int
+
+  startedAt         DateTime     @default(now())
+  endedAt           DateTime?
+
+  resultViews       Int
+  resultNewFollowers Int
+  resultCoinsEarned Int          @default(0)
+  resultHypeGain    Int
+}

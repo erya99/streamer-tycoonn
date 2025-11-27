@@ -1,0 +1,21 @@
+/* src/app/globals.css */
+
+/* Tailwind'in ana CSS'ini içe aktar */
+@import "tailwindcss";
+
+/* Ek global ayarlarımız */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  /* Tailwind utility'lerini @apply ile kullanabiliriz */
+  @apply bg-slate-950 text-slate-100 antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

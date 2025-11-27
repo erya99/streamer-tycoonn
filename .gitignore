@@ -1,0 +1,57 @@
+# --- Node / package managers ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npmrc
+
+# --- Build output ---
+.next/
+out/
+dist/
+coverage/
+.cache/
+.turbo/
+.next-turbo/
+turbo/
+
+# --- Env dosyaları ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# Örnek env dosyasını takipte tutmak istersen:
+#!.env.example
+
+# --- Prisma / veritabanı ---
+prisma/dev.db
+prisma/dev.db-journal
+prisma/*.sqlite
+prisma/*.sqlite-journal
+
+# --- Logs ---
+logs
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log*
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+
+# VSCode (istersen belirli dosyaları takipte tutabilirsin)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+
+# --- Misc ---
+*.swp
+*.swo
+.idea/
+*.iml
